@@ -1,4 +1,3 @@
-//% color="#005A9C" icon="\uf26c" block="OLED"
 namespace oled {
     const OLED_ADDR = 0x3C
     const OFFSET = 2
@@ -46,15 +45,18 @@ namespace oled {
         cmd(0xA6)
         cmd(0xAF)
 
+        cmd(0xAF)
+
+        started = true
         clear()
         show()
-        started = true
+        
     }
 
     //% block="clear OLED buffer"
     export function clear(): void {
-        for (let i = 0; i < 1024; i++) {
-            buffer[i] = 0
+        for (let j = 0; j < 1024; j++) {
+            buffer[j] = 0
         }
     }
 
@@ -83,8 +85,8 @@ namespace oled {
             return
         }
 
-        let page = Math.idiv(y, 8)
-        let index = page * 128 + x
+        let page2 = Math.idiv(y, 8)
+        let index = page2 * 128 + x
         let mask = 1 << (y % 8)
 
         if (on) {
@@ -93,13 +95,46 @@ namespace oled {
             buffer[index] = buffer[index] & ~mask
         }
     }
+    //% block="draw line x0 %x0 y0 %y0 x1 %x1 y1 %y1"
+    export function line(x0: number, y0: number, x1: number, y1: number): void {
+        let dx = Math.abs(x1 - x0)
+        let sx = x0 < x1 ? 1 : -1
+        let dy = -Math.abs(y1 - y0)
+        let sy = y0 < y1 ? 1 : -1
+        let err = dx + dy
 
+        while (true) {
+            pixel(x0, y0, true)
+
+            if (x0 == x1 && y0 == y1) break
+
+            let e2 = 2 * err
+
+            if (e2 >= dy) {
+                err += dy
+                x0 += sx
+            }
+
+            if (e2 <= dx) {
+                err += dx
+                y0 += sy
+            }
+        }
+    }
     //% block="fill OLED buffer %on"
     export function fill(on: boolean): void {
         let value = on ? 0xFF : 0x00
 
-        for (let i = 0; i < 1024; i++) {
-            buffer[i] = value
+        for (let k = 0; k < 1024; k++) {
+            buffer[k] = value
         }
     }
 }
+oled.init()
+basic.forever(function () {
+    oled.pixel(10, 10, true)
+    oled.pixel(20, 20, true)
+    oled.pixel(30, 30, true)
+    oled.pixel(40, 40, true)
+    oled.show()
+})
