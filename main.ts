@@ -130,11 +130,3 @@ namespace oled {
         }
     }
 }
-oled.init()
-basic.forever(function () {
-    oled.pixel(10, 10, true)
-    oled.pixel(20, 20, true)
-    oled.pixel(30, 30, true)
-    oled.pixel(40, 40, true)
-    oled.show()
-})
