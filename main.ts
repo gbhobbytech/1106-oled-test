@@ -2,6 +2,8 @@
 namespace oled {
     const OLED_ADDR = 0x3C
     const OFFSET = 2
+    let buffer = pins.createBuffer(1024)
+    let started = false
 
     function cmd(c: number) {
         let b = pins.createBuffer(2)
@@ -28,6 +30,7 @@ namespace oled {
     //% block="initialise OLED"
     export function init(): void {
         basic.pause(100)
+
         cmd(0xAE)
         cmd(0xD5); cmd(0x80)
         cmd(0xA8); cmd(0x3F)
@@ -42,20 +45,61 @@ namespace oled {
         cmd(0xA4)
         cmd(0xA6)
         cmd(0xAF)
+
+        clear()
+        show()
+        started = true
     }
 
-    //% block="fill OLED %on"
-    export function fill(on: boolean): void {
-        let value = on ? 0xFF : 0x00
+    //% block="clear OLED buffer"
+    export function clear(): void {
+        for (let i = 0; i < 1024; i++) {
+            buffer[i] = 0
+        }
+    }
 
-        let row = pins.createBuffer(128)
-        for (let i = 0; i < 128; i++) {
-            row[i] = value
+    //% block="show OLED"
+    export function show(): void {
+        if (!started) {
+            init()
         }
 
         for (let page = 0; page < 8; page++) {
             setPage(page)
+
+            let row = pins.createBuffer(128)
+            for (let x = 0; x < 128; x++) {
+                row[x] = buffer[page * 128 + x]
+            }
+
             data(row)
+        }
+    }
+
+    //% block="plot OLED pixel x %x y %y on %on"
+    //% x.min=0 x.max=127 y.min=0 y.max=63
+    export function pixel(x: number, y: number, on: boolean): void {
+        if (x < 0 || x > 127 || y < 0 || y > 63) {
+            return
+        }
+
+        let page = Math.idiv(y, 8)
+        let index = page * 128 + x
+        let mask = 1 << (y % 8)
+
+        if (on) {
+            buffer[index] = buffer[index] | mask
+        } else {
+            buffer[index] = buffer[index] & ~mask
+        }
+    }
+
+    //% block="fill OLED buffer %on"
+    export function fill(on: boolean): void {
+        let value = on ? 0xFF : 0x00
+
+        for (let i = 0; i < 1024; i++) {
+            buffer[i] = value
         }
     }
 }
