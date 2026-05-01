@@ -121,6 +121,13 @@ namespace oled {
             }
         }
     }
+    //% block="draw rectangle x %x y %y w %w h %h"
+    export function rect(x: number, y: number, w: number, h: number): void {
+        line(x, y, x + w, y)
+        line(x, y, x, y + h)
+        line(x + w, y, x + w, y + h)
+        line(x, y + h, x + w, y + h)
+    }
     //% block="fill OLED buffer %on"
     export function fill(on: boolean): void {
         let value = on ? 0xFF : 0x00
