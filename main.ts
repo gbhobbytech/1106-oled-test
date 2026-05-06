@@ -1,4 +1,3 @@
-//% color="#005A9C" icon="\uf26c" block="OLED"
 namespace oled {
     const OLED_ADDR = 0x3C
     const OFFSET = 2
@@ -54,16 +53,16 @@ namespace oled {
 
     //% block="clear OLED buffer"
     export function clear(): void {
-        for (let i = 0; i < 1024; i++) {
-            buffer[i] = 0
+        for (let j = 0; j < 1024; j++) {
+            buffer[j] = 0
         }
     }
 
     //% block="fill OLED buffer %on"
     export function fill(on: boolean): void {
         let value = on ? 0xFF : 0x00
-        for (let i = 0; i < 1024; i++) {
-            buffer[i] = value
+        for (let k = 0; k < 1024; k++) {
+            buffer[k] = value
         }
     }
 
@@ -93,8 +92,8 @@ namespace oled {
             return
         }
 
-        let page = Math.idiv(y, 8)
-        let index = page * 128 + x
+        let page2 = Math.idiv(y, 8)
+        let index = page2 * 128 + x
         let mask = 1 << (y % 8)
 
         if (on) {
@@ -226,17 +225,17 @@ namespace oled {
             code = 63
         }
 
-        let index = (code - 32) * 5
+        let index2 = (code - 32) * 5
 
         for (let col = 0; col < 5; col++) {
-            let lineBits = font5x7[index + col]
+            let lineBits = font5x7[index2 + col]
 
-            for (let row = 0; row < 7; row++) {
-                if ((lineBits & (1 << row)) != 0) {
+            for (let row2 = 0; row2 < 7; row2++) {
+                if ((lineBits & (1 << row2)) != 0) {
                     if (size <= 1) {
-                        pixel(x + col, y + row, on)
+                        pixel(x + col, y + row2, on)
                     } else {
-                        fillRect(x + col * size, y + row * size, size, size, on)
+                        fillRect(x + col * size, y + row2 * size, size, size, on)
                     }
                 }
             }
@@ -253,8 +252,8 @@ namespace oled {
             size = 4
         }
 
-        for (let i = 0; i < message.length; i++) {
-            drawChar(message.charAt(i), x + i * 6 * size, y, size, on)
+        for (let l = 0; l < message.length; l++) {
+            drawChar(message.charAt(l), x + l * 6 * size, y, size, on)
         }
     }
 }
