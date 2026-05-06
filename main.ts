@@ -28,6 +28,7 @@ namespace oled {
     }
 
     //% block="initialise OLED"
+    //% group="Basic"
     export function init(): void {
         basic.pause(100)
 
@@ -52,6 +53,7 @@ namespace oled {
     }
 
     //% block="clear OLED buffer"
+    //% group="Basic"
     export function clear(): void {
         for (let j = 0; j < 1024; j++) {
             buffer[j] = 0
@@ -59,6 +61,7 @@ namespace oled {
     }
 
     //% block="fill OLED buffer %on"
+    //% group="Advanced"
     export function fill(on: boolean): void {
         let value = on ? 0xFF : 0x00
         for (let k = 0; k < 1024; k++) {
@@ -67,6 +70,7 @@ namespace oled {
     }
 
     //% block="show OLED"
+    //% group="Advanced"
     export function show(): void {
         if (!started) {
             init()
@@ -86,6 +90,7 @@ namespace oled {
     }
 
     //% block="plot OLED pixel x %x y %y on %on"
+    //% group="Drawing"
     //% x.min=0 x.max=127 y.min=0 y.max=63
     export function pixel(x: number, y: number, on: boolean): void {
         if (x < 0 || x > 127 || y < 0 || y > 63) {
@@ -104,6 +109,7 @@ namespace oled {
     }
 
     //% block="draw line x0 %x0 y0 %y0 x1 %x1 y1 %y1 on %on"
+    //% group="Drawing"
     //% x0.min=0 x0.max=127 y0.min=0 y0.max=63
     //% x1.min=0 x1.max=127 y1.min=0 y1.max=63
     export function line(x0: number, y0: number, x1: number, y1: number, on: boolean = true): void {
@@ -135,6 +141,7 @@ namespace oled {
     }
 
     //% block="draw rectangle x %x y %y w %w h %h on %on"
+    //% group="Drawing"
     //% x.min=0 x.max=127 y.min=0 y.max=63
     //% w.min=0 w.max=127 h.min=0 h.max=63
     export function rect(x: number, y: number, w: number, h: number, on: boolean = true): void {
@@ -151,7 +158,9 @@ namespace oled {
             }
         }
     }
+
     //% block="draw circle x %cx y %cy radius %r on %on"
+    //% group="Drawing"
     //% cx.min=0 cx.max=127 cy.min=0 cy.max=63 r.min=1 r.max=63
     export function circle(cx: number, cy: number, r: number, on: boolean = true): void {
         let x2 = r
@@ -180,6 +189,7 @@ namespace oled {
     }
 
     //% block="draw filled circle x %cx y %cy radius %r on %on"
+    //% group="Drawing"
     //% cx.min=0 cx.max=127 cy.min=0 cy.max=63 r.min=1 r.max=63
     export function fillCircle(cx: number, cy: number, r: number, on: boolean = true): void {
         for (let y2 = -r; y2 <= r; y2++) {
@@ -281,7 +291,21 @@ namespace oled {
         }
     }
 
+    //% block="show text %message x %x y %y size %size"
+    //% group="Basic"
+    //% x.min=0 x.max=127 y.min=0 y.max=63 size.min=1 size.max=4
+    export function showText(message: string, x: number, y: number, size: number = 1): void {
+        if (!started) {
+            init()
+        }
+
+        clear()
+        text(message, x, y, size, true)
+        show()
+    }
+
     //% block="draw text %message x %x y %y size %size on %on"
+    //% group="Advanced"
     //% x.min=0 x.max=127 y.min=0 y.max=63 size.min=1 size.max=4
     export function text(message: string, x: number, y: number, size: number = 1, on: boolean = true): void {
         if (size < 1) {
