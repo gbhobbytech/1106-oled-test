@@ -151,31 +151,30 @@ namespace oled {
             }
         }
     }
-
     //% block="draw circle x %cx y %cy radius %r on %on"
     //% cx.min=0 cx.max=127 cy.min=0 cy.max=63 r.min=1 r.max=63
     export function circle(cx: number, cy: number, r: number, on: boolean = true): void {
-        let x = r
+        let x2 = r
         let y = 0
-        let err = 0
+        let err2 = 0
 
-        while (x >= y) {
-            pixel(cx + x, cy + y, on)
-            pixel(cx + y, cy + x, on)
-            pixel(cx - y, cy + x, on)
-            pixel(cx - x, cy + y, on)
-            pixel(cx - x, cy - y, on)
-            pixel(cx - y, cy - x, on)
-            pixel(cx + y, cy - x, on)
-            pixel(cx + x, cy - y, on)
+        while (x2 >= y) {
+            pixel(cx + x2, cy + y, on)
+            pixel(cx + y, cy + x2, on)
+            pixel(cx - y, cy + x2, on)
+            pixel(cx - x2, cy + y, on)
+            pixel(cx - x2, cy - y, on)
+            pixel(cx - y, cy - x2, on)
+            pixel(cx + y, cy - x2, on)
+            pixel(cx + x2, cy - y, on)
 
             y += 1
 
-            if (err <= 0) {
-                err += 2 * y + 1
+            if (err2 <= 0) {
+                err2 += 2 * y + 1
             } else {
-                x -= 1
-                err += 2 * (y - x) + 1
+                x2 -= 1
+                err2 += 2 * (y - x2) + 1
             }
         }
     }
@@ -183,10 +182,10 @@ namespace oled {
     //% block="draw filled circle x %cx y %cy radius %r on %on"
     //% cx.min=0 cx.max=127 cy.min=0 cy.max=63 r.min=1 r.max=63
     export function fillCircle(cx: number, cy: number, r: number, on: boolean = true): void {
-        for (let y = -r; y <= r; y++) {
-            for (let x = -r; x <= r; x++) {
-                if (x * x + y * y <= r * r) {
-                    pixel(cx + x, cy + y, on)
+        for (let y2 = -r; y2 <= r; y2++) {
+            for (let x3 = -r; x3 <= r; x3++) {
+                if (x3 * x3 + y2 * y2 <= r * r) {
+                    pixel(cx + x3, cy + y2, on)
                 }
             }
         }
