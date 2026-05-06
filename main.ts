@@ -152,6 +152,46 @@ namespace oled {
         }
     }
 
+    //% block="draw circle x %cx y %cy radius %r on %on"
+    //% cx.min=0 cx.max=127 cy.min=0 cy.max=63 r.min=1 r.max=63
+    export function circle(cx: number, cy: number, r: number, on: boolean = true): void {
+        let x = r
+        let y = 0
+        let err = 0
+
+        while (x >= y) {
+            pixel(cx + x, cy + y, on)
+            pixel(cx + y, cy + x, on)
+            pixel(cx - y, cy + x, on)
+            pixel(cx - x, cy + y, on)
+            pixel(cx - x, cy - y, on)
+            pixel(cx - y, cy - x, on)
+            pixel(cx + y, cy - x, on)
+            pixel(cx + x, cy - y, on)
+
+            y += 1
+
+            if (err <= 0) {
+                err += 2 * y + 1
+            } else {
+                x -= 1
+                err += 2 * (y - x) + 1
+            }
+        }
+    }
+
+    //% block="draw filled circle x %cx y %cy radius %r on %on"
+    //% cx.min=0 cx.max=127 cy.min=0 cy.max=63 r.min=1 r.max=63
+    export function fillCircle(cx: number, cy: number, r: number, on: boolean = true): void {
+        for (let y = -r; y <= r; y++) {
+            for (let x = -r; x <= r; x++) {
+                if (x * x + y * y <= r * r) {
+                    pixel(cx + x, cy + y, on)
+                }
+            }
+        }
+    }
+
     const font5x7: number[] = [
         0x00, 0x00, 0x00, 0x00, 0x00, // space
         0x00, 0x00, 0x5F, 0x00, 0x00, // !
