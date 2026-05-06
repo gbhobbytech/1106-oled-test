@@ -52,15 +52,15 @@ namespace oled {
         show()
     }
 
-    //% block="clear OLED buffer"
-    //% group="Basic"
+    //% block="clear drawing"
+    //% group="Advanced"
     export function clear(): void {
         for (let j = 0; j < 1024; j++) {
             buffer[j] = 0
         }
     }
 
-    //% block="fill OLED buffer %on"
+    //% block="fill screen %on"
     //% group="Advanced"
     export function fill(on: boolean): void {
         let value = on ? 0xFF : 0x00
@@ -69,7 +69,7 @@ namespace oled {
         }
     }
 
-    //% block="show OLED"
+    //% block="update OLED"
     //% group="Advanced"
     export function show(): void {
         if (!started) {
@@ -89,8 +89,8 @@ namespace oled {
         }
     }
 
-    //% block="plot OLED pixel x %x y %y on %on"
-    //% group="Drawing"
+    //% block="plot pixel x %x y %y on %on"
+    //% group="Advanced"
     //% x.min=0 x.max=127 y.min=0 y.max=63
     export function pixel(x: number, y: number, on: boolean): void {
         if (x < 0 || x > 127 || y < 0 || y > 63) {
@@ -140,7 +140,7 @@ namespace oled {
         }
     }
 
-    //% block="draw rectangle x %x y %y w %w h %h on %on"
+    //% block="draw rectangle x %x y %y width %w height %h on %on"
     //% group="Drawing"
     //% x.min=0 x.max=127 y.min=0 y.max=63
     //% w.min=0 w.max=127 h.min=0 h.max=63
@@ -188,7 +188,7 @@ namespace oled {
         }
     }
 
-    //% block="draw filled circle x %cx y %cy radius %r on %on"
+    //% block="draw solid circle x %cx y %cy radius %r on %on"
     //% group="Drawing"
     //% cx.min=0 cx.max=127 cy.min=0 cy.max=63 r.min=1 r.max=63
     export function fillCircle(cx: number, cy: number, r: number, on: boolean = true): void {
