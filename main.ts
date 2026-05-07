@@ -108,7 +108,7 @@ namespace oled {
         }
     }
 
-    //% block="draw line x0 %x0 y0 %y0 x1 %x1 y1 %y1 on %on"
+    //% block="draw line from start x %startX y %startY to end x %endX y %endY on %on"
     //% group="Drawing"
     //% x0.min=0 x0.max=127 y0.min=0 y0.max=63
     //% x1.min=0 x1.max=127 y1.min=0 y1.max=63
