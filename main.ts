@@ -70,7 +70,7 @@ namespace oled {
     }
 
     //% block="update OLED"
-    //% group="Advanced"
+    //% group="Basic"
     export function show(): void {
         if (!started) {
             init()
