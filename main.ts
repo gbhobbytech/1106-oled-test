@@ -1,16 +1,3 @@
-input.onButtonPressed(Button.A, function () {
-    oled.arc(
-    0,
-    63,
-    127,
-    63,
-    63,
-    ArcDirection.Up,
-    true
-    )
-    oled.show()
-    basic.pause(1000)
-})
 enum ArcDirection {
     //% block="up"
     Up,
@@ -406,16 +393,3 @@ namespace oled {
     }
 
 }
-oled.init()
-basic.forever(function () {
-    oled.arc(
-    0,
-    0,
-    127,
-    0,
-    63,
-    ArcDirection.Down,
-    true
-    )
-    oled.show()
-})
