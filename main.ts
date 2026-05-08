@@ -1,3 +1,22 @@
+input.onButtonPressed(Button.A, function () {
+    oled.arc(
+    0,
+    63,
+    127,
+    63,
+    63,
+    ArcDirection.Up,
+    true
+    )
+    oled.show()
+    basic.pause(1000)
+})
+enum ArcDirection {
+    //% block="up"
+    Up,
+    //% block="down"
+    Down
+}
 namespace oled {
     const OLED_ADDR = 0x3C
     const OFFSET = 2
@@ -187,15 +206,81 @@ namespace oled {
             }
         }
     }
+    
+    //% block="draw arc from start x %x0 y %y0 to end x %x1 y %y1 height %height direction %direction on %on"
+    //% group="Drawing"
+    //% x0.min=0 x0.max=127 y0.min=0 y0.max=63
+    //% x1.min=0 x1.max=127 y1.min=0 y1.max=63
+    //% height.min=0 height.max=63
+    export function arc(x0: number, y0: number, x1: number, y1: number, height: number, direction: ArcDirection, on: boolean = true): void {
+        if (height < 0) {
+            height = 0
+        }
+
+        let midX = Math.idiv(x0 + x1, 2)
+        let midY = Math.idiv(y0 + y1, 2)
+
+        let controlX = midX
+        let controlY = midY
+
+        // A quadratic curve only reaches about half way toward the control point.
+        // Doubling this makes the visible arc height match the height entered.
+        let controlHeight = height * 2
+
+        if (direction == ArcDirection.Up) {
+            controlY = midY - controlHeight
+        } else {
+            controlY = midY + controlHeight
+        }
+
+        let dx2 = Math.abs(x1 - x0)
+        let dy2 = Math.abs(y1 - y0)
+        let steps = dx2
+
+        if (dy2 > steps) {
+            steps = dy2
+        }
+
+        steps = steps * 2
+
+        if (steps < 1) {
+            steps = 1
+        }
+
+        let lastX = x0
+        let lastY = y0
+
+        for (let l = 1; l <= steps; l++) {
+            let t = l / steps
+            let oneMinusT = 1 - t
+
+            let x3 = Math.round(
+                oneMinusT * oneMinusT * x0 +
+                2 * oneMinusT * t * controlX +
+                t * t * x1
+            )
+
+            let y2 = Math.round(
+                oneMinusT * oneMinusT * y0 +
+                2 * oneMinusT * t * controlY +
+                t * t * y1
+            )
+
+            line(lastX, lastY, x3, y2, on)
+
+            lastX = x3
+            lastY = y2
+        }
+    }
 
     //% block="draw solid circle x %cx y %cy radius %r on %on"
     //% group="Drawing"
     //% cx.min=0 cx.max=127 cy.min=0 cy.max=63 r.min=1 r.max=63
     export function fillCircle(cx: number, cy: number, r: number, on: boolean = true): void {
-        for (let y2 = -r; y2 <= r; y2++) {
-            for (let x3 = -r; x3 <= r; x3++) {
-                if (x3 * x3 + y2 * y2 <= r * r) {
-                    pixel(cx + x3, cy + y2, on)
+        for (let y22 = -r; y22 <= r; y22++) {
+            for (let x32 = -r; x32 <= r; x32++) {
+                if (x32 * x32 + y22 * y22 <= r * r) {
+                    pixel(cx + x32, cy + y22, on)
                 }
             }
         }
@@ -315,8 +400,22 @@ namespace oled {
             size = 4
         }
 
-        for (let l = 0; l < message.length; l++) {
-            drawChar(message.charAt(l), x + l * 6 * size, y, size, on)
+        for (let m = 0; m < message.length; m++) {
+            drawChar(message.charAt(m), x + m * 6 * size, y, size, on)
         }
     }
+
 }
+oled.init()
+basic.forever(function () {
+    oled.arc(
+    0,
+    0,
+    127,
+    0,
+    63,
+    ArcDirection.Down,
+    true
+    )
+    oled.show()
+})
