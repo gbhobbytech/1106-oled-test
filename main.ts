@@ -113,6 +113,35 @@ namespace oled {
             buffer[index] = buffer[index] & ~mask
         }
     }
+    
+    
+    //% blockId=oled_create_icon
+    //% block="icon"
+    //% imageLiteral=1
+    //% imageLiteralColumns=8
+    //% imageLiteralRows=8
+    //% shim=images::createImage
+    //% weight=0
+    export function createIcon(leds: string): Image {
+        return <Image><any>leds
+    }
+
+    //% blockId=oled_draw_icon
+    //% block="draw icon $img at x $x y $y on $on"
+    //% group="Drawing"
+    //% img.shadow=oled_create_icon
+    //% x.min=0 x.max=127
+    //% y.min=0 y.max=63
+    export function drawIcon(img: Image, x: number, y: number, on: boolean = true): void {
+        for (let yy = 0; yy < 8; yy++) {
+            for (let xx = 0; xx < 8; xx++) {
+                if (img.pixel(xx, yy)) {
+                    pixel(x + xx, y + yy, on)
+                }
+            }
+        }
+    }
+
 
     //% block="draw line from start x %startX y %startY to end x %endX y %endY on %on"
     //% group="Drawing"
@@ -158,9 +187,9 @@ namespace oled {
     }
 
     function fillRect(x: number, y: number, w: number, h: number, on: boolean): void {
-        for (let yy = y; yy < y + h; yy++) {
-            for (let xx = x; xx < x + w; xx++) {
-                pixel(xx, yy, on)
+        for (let yy2 = y; yy2 < y + h; yy2++) {
+            for (let xx2 = x; xx2 < x + w; xx2++) {
+                pixel(xx2, yy2, on)
             }
         }
     }
