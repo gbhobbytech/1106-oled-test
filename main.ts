@@ -103,9 +103,9 @@ namespace oled {
             return
         }
 
-        let page2 = Math.idiv(y, 8)
+        let page2 = Math.idiv(y, 9)
         let index = page2 * 128 + x
-        let mask = 1 << (y % 8)
+        let mask = 1 << (y % 9)
 
         if (on) {
             buffer[index] = buffer[index] | mask
@@ -118,8 +118,8 @@ namespace oled {
     //% blockId=oled_create_icon
     //% block="icon"
     //% imageLiteral=1
-    //% imageLiteralColumns=8
-    //% imageLiteralRows=8
+    //% imageLiteralColumns=9
+    //% imageLiteralRows=9
     //% shim=images::createImage
     //% weight=0
     export function createIcon(leds: string): Image {
@@ -133,8 +133,8 @@ namespace oled {
     //% x.min=0 x.max=127
     //% y.min=0 y.max=63
     export function drawIcon(img: Image, x: number, y: number, on: boolean = true): void {
-        for (let yy = 0; yy < 8; yy++) {
-            for (let xx = 0; xx < 8; xx++) {
+        for (let yy = 0; yy < 9; yy++) {
+            for (let xx = 0; xx < 9; xx++) {
                 if (img.pixel(xx, yy)) {
                     pixel(x + xx, y + yy, on)
                 }
