@@ -103,9 +103,9 @@ namespace oled {
             return
         }
 
-        let page2 = Math.idiv(y, 9)
+        let page2 = Math.idiv(y, 8)
         let index = page2 * 128 + x
-        let mask = 1 << (y % 9)
+        let mask = 1 << (y % 8)
 
         if (on) {
             buffer[index] = buffer[index] | mask
